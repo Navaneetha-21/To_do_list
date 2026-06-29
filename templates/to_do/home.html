@@ -1,0 +1,84 @@
+{% extends 'to_do/base.html' %}
+
+{% block title%}Home Page{% endblock title %}
+
+
+{% block content %}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0%;
+    }
+
+    body {
+        display: flex;
+        background-color: aqua;
+
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        background: white;
+        padding: 100px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+    }
+
+    .write{
+        display: flex;
+        gap: 20px;
+    }
+
+    .ul-container li{
+        list-style: none;
+        display: flex;
+    
+    }
+    .done {
+        text-decoration: line-through;
+        color: #999;
+    }
+
+
+</style>
+
+
+<div class="container">
+
+    <h2>My Tasks</h2>
+    <form class="write" method="POST">
+        {% csrf_token %}
+        {{ form.task }}
+        <button class="write" type="submit">+ Add</button>
+    </form>
+
+    <ul class="ul-container">
+        {% for task in Tasks %}
+
+        <li>
+        <a href="{% url 'to_do_toggle' task.id %}" class="toggle-link">
+        {% if task.completed %}
+        ✅ 
+        {% else %}
+            ⬜
+        {% endif %}
+        </a>
+        <span class="{% if task.completed %}done{% endif %}">{{task.task}}</span>
+        <a href="{% url 'to_do_delete' task.id %}" onclick="return confirm('Are You Done with this Task ?')">Delete</a>
+        {% empty %}
+        <li>No Task Addded Yet!</li>
+        {% endfor %}
+    </ul>
+    <strong>Total Tasks:{{Total}}</strong>
+    <strong>Total Completed Tasks: {{completed_count}}</strong>
+    <strong>Total Active Tasks:{{active_count}}</strong>
+
+
+</div>
+
+{% endblock content %}
