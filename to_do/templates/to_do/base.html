@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title%}
+        {% endblock title %}
+    </title>
+</head>
+<body>
+
+    <header style="display: flex; justify-content: space-between; padding: 10px 20px; background: #f0f0f0; border-bottom: 1px solid #ccc; ">
+
+        <h1 style="margin: 0;">My To-Do App</h1>
+
+        <div>
+            {% if user.is_authenticated %}
+                <span>Welcome,{{ user.username }}!</span>
+
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Logout</button>
+                </form>
+            {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+
+            {% endif %}
+        </div>
+
+    </header>
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>

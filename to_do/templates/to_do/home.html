@@ -1,0 +1,143 @@
+{% extends 'to_do/base.html' %}
+
+{% block title%}Home Page{% endblock title %}
+
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    * {
+        margin: 0;
+        padding: 0%;
+    }
+
+    body {
+        display: flex;
+        background-color: rgb(234, 138, 11);
+
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        background: rgb(190, 217, 207);
+        padding: 80px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 0 10px rgba(219, 5, 226, 0.834);
+
+    }
+
+    .write {
+        display: flex;
+        gap: 20px;
+    }
+
+    .ul-container li {
+        list-style: none;
+        display: flex;
+
+    }
+
+    .done {
+        text-decoration: line-through;
+        color: #999;
+    }
+
+    #text{
+        margin-bottom: 15px;
+    }
+
+    .top{
+        display: flex;
+        font-size: large;
+    }
+    .top i{
+        margin-top: 7px;
+        font-size: 20px;
+    }
+
+    .top h2{
+        margin-top: 3px;
+    }
+
+    
+    .btn{
+        width: 70px;
+        height: 40px;
+        font-size: 15px;
+        background-color: blue;
+        color: whitesmoke;
+        border-radius: 15px;
+    }
+
+    .write{
+        margin-bottom: 18px;
+        
+    }
+
+    
+    .delete{
+        margin-left: 15px;
+        text-decoration: none;
+        border: 2px solid black;
+        padding: 1px;
+        border-radius: 5px;
+        background-color: red;
+        color: white;
+        
+    }
+
+    .list{
+        display: flex;
+        font-size: 18px;
+
+
+    }
+    .last2{
+        margin-bottom: 15px;
+    }
+
+    .last{
+        display: flex;
+    }
+</style>
+
+
+<div class="container">
+    <div class="top">
+    <i class="fa-solid fa-list-check"></i><h2 id="text">My Tasks</h2>
+    </div>
+    <form class="write" method="POST">
+        {% csrf_token %}
+        {{ form.task }}
+        <button class="btn" type="submit">+ Add</button>
+    </form>
+
+    <ul class="ul-container">
+        {% for task in Tasks %}
+
+        <li class="list">
+            <a href="{% url 'to_do_toggle' task.id %}" class="toggle-link">
+                {% if task.completed %}
+                ✅
+                {% else %}
+                ⬜
+                {% endif %}
+            </a>
+            <span class="{% if task.completed %}done{% endif %}">{{task.task}}</span>
+            <a href="{% url 'to_do_delete' task.id %}"
+                onclick="return confirm('Are You Done with this Task ?')" class="delete">Delete</a>
+            {% empty %}
+        <li class="last2">No Task Addded Yet!</li>
+        {% endfor %}
+    </ul>
+    <strong class="last">Total Tasks:{{Total}}</strong>
+    <strong class="last">Total Completed Tasks: {{completed_count}}</strong>
+    <strong class="last">Total Active Tasks:{{active_count}}</strong>
+
+
+</div>
+
+{% endblock content %}
